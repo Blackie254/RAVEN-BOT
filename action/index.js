@@ -40,7 +40,7 @@ const color = (text, color) => {
 if (!fs.existsSync(__dirname + '/session/creds.json')) {
 if(!session) return console.log('Please add your session to SESSION env !!')
 const sessdata = session.replace("RAVEN;;;", '');
-const filer = await axios.get(`https://mega.nz/file/${sessdata}`)
+const filer = axios.get(`https://mega.nz/file/${sessdata}`)
 filer.download((err, data) => {
 if(err) throw err
 fs.writeFile(__dirname + '/session/creds.json', data, () => {
