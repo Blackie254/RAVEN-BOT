@@ -836,39 +836,40 @@ await client.sendMessage(
 
 //========================================================================================================================//	      		      
   case "song2": {
-const yts = require("yt-search");
+if (!q) return m.reply("Please provide a song name You want to download!");
+try {
+      const yt = await yts(q);
+      if (!yt.results.length) {
+        await m.reply("No results found for your query.");
+        return;
+      }
 
-    try {
-        if (!text) return m.reply("What song do you want to download?");
+	m.reply('_Please wait your download on progress_');
+	
+      const song = yt.results[0];
+      const apiUrl = `https://apis.davidcyriltech.my.id/youtube/mp3?url=${encodeURIComponent(song.url)}`;
 
-        const { videos } = await yts(text);
-        if (!videos || videos.length === 0) return m.reply("No songs found!");
-	    
-await m.reply(`_Please wait your download is in progress_`);
-	    
-        const urlYt = videos[0].url;
-        let data = await fetchJson(`https://api.dreaded.site/api/ytdl/audio?url=${urlYt}`);
+      const res = await fetch(apiUrl);
+      const data = await res.json();
 
-        if (!data || !data.result || !data.result.url) {
-            return m.reply("Failed to fetch audio from the API.");
-        }
-
-const audioUrl = data.result.url;
-const title = data.result.title;
-
-        await client.sendMessage(
-            m.chat,
-            {
-                audio: { url: audioUrl },
-                mimetype: "audio/mpeg",
-                fileName: `${title}.mp3`,
-            },
-            { quoted: m }
-        );
-    } catch (error) {
-        m.reply("Download failed\n" + error.message);
+      if (!data?.result?.downloadUrl) {
+        await m.reply("Failed to get download link. Please try again later.");
+        return;
+      }
+await client.sendMessage(
+        m.chat,
+        {
+          audio: { url: data.result.downloadUrl },
+          mimetype: "audio/mpeg",
+	  fileName: `${song.title}.mp3`,
+        },
+        { quoted: m }
+      );
+} catch (error) {
+      console.error(error);
+      await m.reply("An error occurred while downloading the music. Please try again.");
     }
-}
+  }
  break;
 		      
 //========================================================================================================================//
