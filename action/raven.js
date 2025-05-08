@@ -836,8 +836,9 @@ await client.sendMessage(
 
 //========================================================================================================================//	      		      
   case "song2": {
-if (!q) return m.reply("Please provide a song name You want to download!");
 try {
+if (!q) return m.reply("Please provide a song name You want to download!");
+
       const yt = await yts(q);
       if (!yt.results.length) {
         await m.reply("No results found for your query.");
@@ -847,7 +848,7 @@ try {
 	m.reply('_Please wait your download on progress_');
 	
       const song = yt.results[0];
-      const apiUrl = `https://apis.davidcyriltech.my.id/youtube/mp3?url=${encodeURIComponent(song.url)}`;
+      const apiUrl = `https://apis.davidcyriltech.my.id/youtube/mp3?url=${encodeURIComponent(song)}`;
 
       const res = await fetch(apiUrl);
       const data = await res.json();
