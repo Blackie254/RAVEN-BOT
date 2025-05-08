@@ -64,6 +64,7 @@ async function downloadSessionData() {
 }
 
 async function startRaven() {
+  await downloadSessionData();
   const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join(".")}, isLatest: ${isLatest}`);
