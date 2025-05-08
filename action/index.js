@@ -27,7 +27,7 @@ let lastTextTime = 0;
 const messageDelay = 3000;
 const currentTime = Date.now();
 const Events = require('../action/events');
-//const authenticationn = require('../action/auth');
+const authenticationn = require('../action/auth');
 const PhoneNumber = require("awesome-phonenumber");
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('../lib/ravenexif');
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep } = require('../lib/ravenfunc');
@@ -37,7 +37,7 @@ const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
 
-async function downloadSessionData() {
+/* async function downloadSessionData() {
   if (!fs.existsSync(__dirname + '/session/creds.json')) 
 if (!session) {
         console.error('Please add your session to SESSION_ID env !!');
@@ -56,9 +56,9 @@ if (!session) {
         return false;
     }
 }
-
+*/
 async function startRaven() {
-  await downloadSessionData();
+  await aauthenticationn();
   const { state, saveCreds } = await useMultiFileAuthState("session");
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join(".")}, isLatest: ${isLatest}`);
