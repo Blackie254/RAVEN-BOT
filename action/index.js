@@ -37,15 +37,9 @@ const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
 
-const sessionDir = path.join(__dirname, 'session');
-const credsPath = path.join(sessionDir, 'creds.json');
-
-if (!fs.existsSync(sessionDir)) {
-    fs.mkdirSync(sessionDir, { recursive: true });
-}
-
 async function downloadSessionData() {
-    if (!session) {
+  if (!fs.existsSync(__dirname + '/session/creds.json')) 
+if (!session) {
         console.error('Please add your session to SESSION_ID env !!');
         return false;
     }
@@ -54,7 +48,7 @@ async function downloadSessionData() {
     try {
         const response = await axios.get(url);
         const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
-        await fs.promises.writeFile(credsPath, data);
+        await fs.writeFile(__dirname + '/session/creds.json', data);
         console.log("🔒 Session Successfully Loaded !!");
         return true;
     } catch (error) {
@@ -65,7 +59,7 @@ async function downloadSessionData() {
 
 async function startRaven() {
   await downloadSessionData();
-  const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
+  const { state, saveCreds } = await useMultiFileAuthState("session");
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join(".")}, isLatest: ${isLatest}`);
   console.log(
