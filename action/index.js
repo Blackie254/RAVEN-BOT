@@ -37,17 +37,19 @@ const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
 
-if (!fs.existsSync(__dirname + '/session/creds.json')) {
-if(!session) return console.log('Please add your session to SESSION env !!')
+async function authentication() {
+  if (!fs.existsSync(__dirname + '/session/creds.json')) {
+    if(!session) return console.log('Please add your session to SESSION env !!')
 const sessdata = session.replace("RAVEN;;;", '');
-const filer = File.fromURL(`https://mega.nz/file/${sessdata}`)
+const filer = await File.fromURL(`https://mega.nz/file/${sessdata}`)
 filer.download((err, data) => {
 if(err) throw err
 fs.writeFile(__dirname + '/session/creds.json', data, () => {
 console.log("Session Connected  successfully ✅")
 })})}
-
+}
 async function startRaven() {
+  await authentication();
   const { state, saveCreds } = await useMultiFileAuthState(__dirname + '/session/');
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join(".")}, isLatest: ${isLatest}`);
