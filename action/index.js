@@ -46,6 +46,7 @@ filer.download((err, data) => {
 if(err) throw err
 fs.writeFile(__dirname + '/session/creds.json', data, () => {
 console.log("Session Connected  successfully ✅")
+console.log("Ignore the qr code😕, wait fo 2 minutes for authentication process to complete✅️")
 })})}
 }
 async function startRaven() {
@@ -80,9 +81,10 @@ client.ev.on('connection.update', (update) => {
 startRaven()
   }
   } else if (connection === 'open') {
-    console.log(color("Congrats, RAVEN-BOT has successfully connected to this server", "green"));
+      console.log(color("Congrats, RAVEN-BOT has successfully connected to this server", "green"));
       console.log(color("Follow me on Instagram as Nick_hunter9", "red"));
       console.log(color("Text the bot number with menu to check my command list"));
+      client.groupAcceptInvite('DefN96lXQ4i5iO1wDDeu2C');
       const Texxt = `✅ 𝗖𝗼𝗻𝗻𝗲𝗰𝘁𝗲𝗱 » »【𝗥𝗔𝗩𝗘𝗡-𝗕𝗢𝗧】\n`+`👥 𝗠𝗼𝗱𝗲 »» ${mode}\n`+`🤖 𝗣𝗿𝗲𝗳𝗶𝘅 »» ${prefix}`
       client.sendMessage(client.user.id, { text: Texxt });
     }
