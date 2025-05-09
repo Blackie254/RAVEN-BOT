@@ -20,14 +20,14 @@ const express = require("express");
 const chalk = require("chalk");
 const FileType = require("file-type");
 const figlet = require("figlet");
-
+const { File } = require('megajs')
 const app = express();
 const _ = require("lodash");
 let lastTextTime = 0;
 const messageDelay = 3000;
 const currentTime = Date.now();
 const Events = require('../action/events');
-const authenticationn = require('../action/auth');
+//const authenticationn = require('../action/auth');
 const PhoneNumber = require("awesome-phonenumber");
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('../lib/ravenexif');
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep } = require('../lib/ravenfunc');
@@ -37,28 +37,17 @@ const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
 
-/* async function downloadSessionData() {
-  if (!fs.existsSync(__dirname + '/session/creds.json')) 
-if (!session) {
-        console.error('Please add your session to SESSION_ID env !!');
-        return false;
-    }
-    const sessdata = session.split("RAVEN;;;")[1];
-    const url = `https://mega.nz/file/${sessdata}`;
-    try {
-        const response = await axios.get(url);
-        const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
-        await fs.writeFile(__dirname + '/session/creds.json', data);
-        console.log("🔒 Session Successfully Loaded !!");
-        return true;
-    } catch (error) {
-       // console.error('Failed to download session data:', error);
-        return false;
-    }
-}
-*/
+if (!fs.existsSync(__dirname + '/session/creds.json')) {
+if(!session) return console.log('Please add your session to SESSION env !!')
+const sessdata = session.replace("RAVEN;;;", '');
+const filer = File.fromURL(`https://mega.nz/file/${sessdata}`)
+filer.download((err, data) => {
+if(err) throw err
+fs.writeFile(__dirname + '/session/creds.json', data, () => {
+console.log("Session Connected  successfully ✅")
+})})}
+
 async function startRaven() {
-  await authenticationn();
   const { state, saveCreds } = await useMultiFileAuthState("session");
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join(".")}, isLatest: ${isLatest}`);
