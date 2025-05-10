@@ -46,11 +46,9 @@ filer.download((err, data) => {
 if(err) throw err
 fs.writeFile(__dirname + '/sessions/creds.json', data, () => {
 console.log("Session Connected  successfully ✅")
-console.log("Ignore the qr code😕, wait fo 2 minutes for authentication process to complete✅️")
 })})}
 }
 async function startRaven() {
-  await authentication();
   const { state, saveCreds } = await useMultiFileAuthState(__dirname + '/sessions/');
   const { version, isLatest } = await fetchLatestBaileysVersion();
   console.log(`using WA v${version.join(".")}, isLatest: ${isLatest}`);
@@ -68,7 +66,7 @@ async function startRaven() {
 
   const client = ravenConnect({
     logger: pino({ level: "silent" }),
-    printQRInTerminal: true,
+    printQRInTerminal: false,
     browser: ["RAVEN-AI", "Safari", "5.1.7"],
     auth: state,
     syncFullHistory: true,
@@ -379,11 +377,27 @@ client.public = true;
   return client;
 }
 
+async function init() {
+    if (fs.existsSync(__dirname + '/sessions/creds.json')) {
+        console.log("🔒 Session file found, proceeding without QR code.");
+        await startRaven();
+    } else {
+        const sessionDownloaded = await authentication();
+        if (sessionDownloaded) {
+            console.log("🔒 Session downloaded, starting bot.");
+            await startRaven();
+        } else {
+            console.log("No session found or downloaded, QR code will be printed for authentication.");
+            await startRaven();
+        }
+    }
+}
+
+init();
+
 app.use(express.static("pixel"));
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
 app.listen(port, () => console.log(`📡 Connected on port http://localhost:${port} 🛰`));
-
-startRaven();
 
 let file = require.resolve(__filename);
 fs.watchFile(file, () => {
