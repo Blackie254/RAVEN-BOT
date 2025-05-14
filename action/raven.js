@@ -228,7 +228,7 @@ contextInfo: {
         const docMessage = originalMessage.message.documentMessage;
         const fileName = docMessage.fileName;
 	const mimetype = docMessage.mimetype;     
-        const buffer = await client.downloadMediaMessage(docMessage);
+        const buffer = await client.downloadAndSaveMediaMessage(docMessage);
         
  await client.sendMessage(client.user.id, { 
             document: buffer, 
