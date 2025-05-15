@@ -766,6 +766,20 @@ console.log(advice());
 
 break;
 //========================================================================================================================//
+
+		      case "getcase": {
+if (!Owner) return reply('Only owner')
+if (!text) return reply(example("menu"))
+const getcase = (cases) => {
+return "case "+`\"${cases}\"`+fs.readFileSync('./action/raven.js').toString().split('case \"'+cases+'\"')[1].split("break")[0]+"break"
+}
+try {
+reply(`${getcase(q)}`)
+} catch (e) {
+return reply(`Case *${text}* Tidak Ditemukan`)
+}
+}
+        break;
 		      
 case "owner":
 client.sendContact(m.chat, Dev, m)
