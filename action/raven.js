@@ -335,7 +335,7 @@ return (ramm)
 } 
 	      
 let totalcmds = () => {
-   var mytext = fs.readFileSync("./raven.js").toString();
+   var mytext = fs.readFileSync("./action/raven.js").toString();
     var numUpper = (mytext.match(/case ['"]/g) || []).length;
     return numUpper;
 };
