@@ -333,6 +333,12 @@ const ramp = [ "■□□□□□ 10%", "■■□□□□ 20%", "■■■□
 const ramm = ramp[Math.floor(Math.random() * ramp.length)];      
 return (ramm)  
 }  
+
+ const totalcmds = () => {
+   const mytext = fs.readFileSync("../action/raven.js").toString();
+    const numUpper = (mytext.match(/case ['"]/g) || []).length;
+    return numUpper;
+};
 //========================================================================================================================// 
     if (gptdm === 'TRUE' && m.chat.endsWith("@s.whatsapp.net")) {
 if (itsMe) return;
@@ -482,6 +488,7 @@ let cap = `𝗛𝗲𝘆 𝘁𝗵𝗲𝗿𝗲😁, ${getGreeting()}\n\n╔══�
 ║✫┃ 𝗨𝘀𝗲𝗿 : ${m.pushName}
 ║✫┃ 𝗣𝗿𝗲𝗳𝗶𝘅 : ${prefix}
 ║✫┃ 𝗠𝗼𝗱𝗲 : ${mode}
+║✫┃ 𝗠𝗼𝗱𝗲 : ${totalcmds()}
 ║✫┃ 𝗦𝗽𝗲𝗲𝗱 :   ${Rspeed.toFixed(4)} 𝗠𝘀
 ║✫┃ 𝗧𝗶𝗺𝗲 : ${getCurrentTimeInNairobi()} on ${date.toLocaleString('en-US', { weekday: 'long', timeZone: 'Africa/Nairobi'})}
 ║✫┃ 𝗥𝗔𝗠 𝗨𝘀𝗮𝗴𝗲 :  ${ram()}
