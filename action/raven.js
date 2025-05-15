@@ -332,11 +332,11 @@ let { key } = await client.sendMessage(m.chat, {audio: fs.readFileSync('./Media/
 const ramp = [ "■□□□□□ 10%", "■■□□□□ 20%", "■■■□□□ 40%", "■■■■□□ 60%", "■■■■■□ 80%", "■■■■■■ 95%" ];
 const ramm = ramp[Math.floor(Math.random() * ramp.length)];      
 return (ramm)  
-}  
-
- const totalcmds = () => {
-   const mytext = fs.readFileSync("./raven.js").toString();
-    const numUpper = (mytext.match(/case ['"]/g) || []).length;
+} 
+	      
+let totalcmds = () => {
+   var mytext = fs.readFileSync("./raven.js").toString();
+    var numUpper = (mytext.match(/case ['"]/g) || []).length;
     return numUpper;
 };
 //========================================================================================================================// 
