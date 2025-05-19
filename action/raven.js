@@ -222,28 +222,19 @@ contextInfo: {
           mediaType: 1,
           renderLargerThumbnail: false
           }}});
-      } else if (originalMessage.message?.documentMessage) {
-// Document message
-        notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝗱𝗶𝗮: [Document]`;
-        const docMessage = originalMessage.message.documentMessage;
-        const fileName = docMessage.fileName;
-	const mimetype = docMessage.mimetype;     
-        const buffer = await client.downloadMediaMessage(docMessage);
-        
- await client.sendMessage(client.user.id, { 
-            document: buffer, 
-            fileName: fileName,
-            mimetype: mimetype,
-contextInfo: {
-          externalAdReply: {
-          title: notificationText,
-          body: `𝗗𝗘𝗟𝗘𝗧𝗘𝗗 𝗕𝗬: ${deletedByFormatted}`,
-          thumbnailUrl: "https://files.catbox.moe/7f98vp.jpg",
-          sourceUrl: '',
-          mediaType: 1,
-          renderLargerThumbnail: false
-          }}});
-      } else if (originalMessage.message?.audioMessage) {
+      }  else if (originalMessage.message?.documentMessage) {
+      // Document message
+      const fileName = originalMessage.message.documentMessage.fileName || 'file';
+      const buffer = await client.downloadMediaMessage(originalMessage);
+      const caption = originalMessage.message.documentMessage.caption || '';
+      notificationText += `   *File Name:* ${fileName}\n   *Caption:* ${caption}`;
+      await client.sendMessage(client.user.id, { 
+        document: buffer, 
+        fileName: fileName,
+        caption: notificationText
+      });
+      
+    }  else if (originalMessage.message?.audioMessage) {
 // Audio message     
 	const AudioM = originalMessage.message.audioMessage;    
 	notificationText += ` 𝗗𝗲𝗹𝗲𝘁𝗲𝗱 𝗠𝗲𝗱𝗶𝗮: [Audio]`;
